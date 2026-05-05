@@ -14,6 +14,8 @@ The network consists of three personal devices connected via Tailscale's mesh VP
 | HP Laptop   | Windows | Active workstation (school, project work)    |
 | iPhone      | iOS     | Personal mobile device                       |
 
+![Tailscale admin console showing connected devices and tags](screenshots/machines-view.png)
+
 ### Topology
 [iPhone] <-----[HP Laptop]
     \   SMB File   /
@@ -47,11 +49,15 @@ Each device was assigned a tag in the policy file for use in ACL rules:
 | HP Laptop   | tag:oscar-hp      |
 | iPhone      | tag:mobilecommand |
 
+![Tailscale iOS client showing active connection](screenshots/mobile-app.png)
+
 ### 4. Exit Node Configuration
 The Macbook Air was designated as the exit node. During initital setup, the exit node toggle was disabled and would not stay active. The issue was traced to ACL policy. Without explicit rules permitting traffic from client devices to the exit node, Tailscale would not enable the route. Adding an ACL rule allowing 'tag:oscar-hp' and 'tag:mobilecommand' to reach 'tag:exit-mac' resolved the issue.
 
 ### ACL Policy
 The current policy contains two rules: a specific rule allowing client devices to route traffic through the exit node, and a permissive rule allowing all-to-all communication across the mesh. The second rule was added during troubleshooting to eliminate ACL conflicts and remains in place for general device communication. Tightening this to least-privilege rules is identified as a future improvement.
+
+![ACL policy configuration in Tailscale admin console](screenshots/acl-policy.png)
 
 ### 6. SSH Access
 The default Tailscale SSH policy is in effect, allowing admin users to SSH into the exit node as non-root users.
